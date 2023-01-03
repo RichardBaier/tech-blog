@@ -1,5 +1,3 @@
-
-
 const router = require('express').Router();
 const { User, Blog } = require('../../models');
 
@@ -7,6 +5,7 @@ const { User, Blog } = require('../../models');
 router.post('/', async (req, res) => {
     try {
         const userData = await User.create(req.body)
+        console.log(req.body)
         req.session.save(() => {
             req.session.user_id = userData.id,
             req.session.logged_in = true,
@@ -18,9 +17,12 @@ router.post('/', async (req, res) => {
 })
 // Validate sign in
 router.post('/login', async (req, res) => {
+    console.log('You hit login')
     try {
         // Username verification
+        console.log(req.body);
         const userData = await User.findOne({ where: { username: req.body.username }});
+        console.log(userData);
         if(!userData){
             res.status(400).json({ message: 'Incorrect username or password'})
             return;
